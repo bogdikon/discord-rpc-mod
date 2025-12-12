@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "discord-rpc",
+  "version": "${version}",
+  "name": "Discord RPC mod",
+  "description": "Discord RPC mod for Minecraft I made just for fun",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/discord-rpc/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      "ru.bogdikon.discordRpc.client.DiscordRpcDataGenerator"
+    ],
+    "client": [
+      "ru.bogdikon.discordRpc.client.DiscordRpcClient"
+    ],
+    "main": [
+      "ru.bogdikon.discordRpc.DiscordRpc"
+    ]
+  },
+  "mixins": [
+    "discord-rpc.mixins.json",
+    {
+      "config": "discord-rpc.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
