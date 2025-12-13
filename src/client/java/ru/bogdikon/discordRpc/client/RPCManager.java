@@ -1,14 +1,14 @@
 package ru.bogdikon.discordRpc.client;
-import com.jcraft.jorbis.Block;
+
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.activity.Activity;
 
-import java.time.Instant;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.world.biome.Biome;
 
 
 public class RPCManager {
@@ -27,7 +27,6 @@ public class RPCManager {
 
             // making Activity
             Activity activity = new Activity();
-            activity.timestamps().setStart(Instant.now());
 
             MinecraftClient client = MinecraftClient.getInstance();
 
@@ -39,22 +38,54 @@ public class RPCManager {
                     if (world != null && player != null) {
                         String dimension = world.getRegistryKey().getValue().toString();
                         String dimensionFriendly = "<idk>";
+                        // Checking dimension
+                        RegistryEntry<Biome> biome = world.getBiome(player.getBlockPos());
+
+                        activity.assets().setSmallImage("barrier"); // In case it cant be detected
+                        activity.assets().setSmallText("couldn't detect");
+
+                        BiomeData biomeData = BiomeMapper.getCurrentBiome();
+
                         switch (dimension) {
-                            case "minecraft:overworld" -> dimensionFriendly = "overworld";
-                            case "minecraft:the_end" -> dimensionFriendly = "the end";
-                            case "minecraft:the_nether" -> dimensionFriendly = "the nether";
+                            case "minecraft:overworld" -> {
+                                dimensionFriendly = "overworld";
+                                activity.assets().setLargeImage("grass_block");
+                                activity.assets().setLargeText("Overworld");
+                                // Checking biome
+                                if (biomeData != null) {
+                                    activity.assets().setSmallImage(biomeData.image());
+                                    activity.assets().setSmallText(biomeData.text());
+                                }
+                            }
+                            case "minecraft:the_end" -> {
+                                dimensionFriendly = "the end";
+                                activity.assets().setLargeImage("end_stone");
+                                activity.assets().setLargeText("The End");
+                                if (biomeData != null) {
+                                    activity.assets().setSmallImage(biomeData.image());
+                                    activity.assets().setSmallText(biomeData.text());
+                                }
+                            }
+                            case "minecraft:the_nether" -> {
+                                dimensionFriendly = "the nether";
+                                activity.assets().setLargeImage("netherrack");
+                                activity.assets().setLargeText("The Nether");
+                                // Checking biome
+                                if (biomeData != null) {
+                                    activity.assets().setSmallImage(biomeData.image());
+                                    activity.assets().setSmallText(biomeData.text());
+                                }
+                            }
                         }
                         String details = String.format("In %s", dimensionFriendly);
+
                         activity.setDetails(details);
-                        switch (dimension) {
-                            case "minecraft:the_nether" -> activity.assets().setLargeImage("netherrack");
-                            case "minecraft:the_end" -> activity.assets().setLargeImage("end_stone");
-                            default -> activity.assets().setLargeImage("grass_block");
-                        }
                         core.activityManager().updateActivity(activity);
                     } else { // assuming this means main menu???
                         activity.setDetails("In main menu");
-                        activity.assets().setLargeImage("grass_block");
+                        activity.assets().setLargeImage("workbench");
+                        activity.assets().setLargeText("Main menu");
+                        activity.assets().setSmallImage(null);
                         core.activityManager().updateActivity(activity);
                     }
                     core.runCallbacks();
