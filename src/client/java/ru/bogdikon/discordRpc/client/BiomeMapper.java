@@ -126,8 +126,8 @@ public final class BiomeMapper {
         // THE END
         // =====================
         BIOME_DATA.put("the_end", new BiomeData("end_stone", "The End"));
-        BIOME_DATA.put("end_highlands", new BiomeData("end_stone", "End Highlands"));
-        BIOME_DATA.put("end_midlands", new BiomeData("end_stone", "End Midlands"));
+        BIOME_DATA.put("end_highlands", new BiomeData("chorus_flower", "End Highlands"));
+        BIOME_DATA.put("end_midlands", new BiomeData("purpur_pillar", "End Midlands"));
         BIOME_DATA.put("small_end_islands", new BiomeData("end_stone", "Small End Islands"));
         BIOME_DATA.put("end_barrens", new BiomeData("end_stone", "End Barrens"));
 

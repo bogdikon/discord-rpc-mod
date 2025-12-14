@@ -10,6 +10,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 
+import java.time.Instant;
+
 
 public class RPCManager {
     private static Core core;
@@ -34,6 +36,8 @@ public class RPCManager {
             Activity activity = new Activity();
 
             MinecraftClient client = MinecraftClient.getInstance();
+
+            activity.timestamps().setStart(Instant.now());
 
             Thread rpcThread = new Thread(() -> {
                 while (!Thread.currentThread().isInterrupted()) {
