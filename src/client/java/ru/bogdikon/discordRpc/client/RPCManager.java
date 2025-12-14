@@ -15,6 +15,11 @@ public class RPCManager {
     private static Core core;
     private static Thread callbackThread;
 
+    public static boolean isSingleplayer() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        return client.isInSingleplayer();
+    }
+
     public static void start() {
         try {
             // Core parameters
@@ -80,12 +85,19 @@ public class RPCManager {
                         String details = String.format("In %s", dimensionFriendly);
 
                         activity.setDetails(details);
+
+                        if (isSingleplayer()) {
+                            activity.setState("Playing singleplayer");
+                        } else {
+                            activity.setState("Playing multiplayer");
+                        }
                         core.activityManager().updateActivity(activity);
                     } else { // assuming this means main menu???
                         activity.setDetails("In main menu");
                         activity.assets().setLargeImage("workbench");
                         activity.assets().setLargeText("Main menu");
                         activity.assets().setSmallImage(null);
+                        activity.setState(null);
                         core.activityManager().updateActivity(activity);
                     }
                     core.runCallbacks();
